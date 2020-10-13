@@ -43,11 +43,11 @@ public interface IMethods
         return true;
     }
 
-    public static Triangle[] AddTriangles(Triangle[] triangle, boolean modeWorkForRightTriangle)
+    public static Triangle[] AddTriangles(Triangle[] triangle/*, boolean modeWorkForRightTriangle*/)
     {
         Scanner scanner = new Scanner(System.in);
         int newSizeMassiveInt;
-        String side0 = "", side1 = "", side2 = "";
+        String side0, side1, side2;
         boolean checkExistBoolean = true, rightTriangle = false;
 
         System.out.print("Сколько хотите добавить треугольников: ");
@@ -90,20 +90,69 @@ public interface IMethods
                     i--;
                 }
                 else
-                    reservMassive[i] = new Triangle(reservSides, false);
+                    reservMassive[i] = new Triangle(reservSides);
 
-                if(modeWorkForRightTriangle)
+            }
+        }while (!checkExistBoolean);
+
+        return reservMassive;
+    }
+
+    public static RightTriangle[] AddRightTriangle(RightTriangle[] rightTriangles)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int newSizeMassiveInt;
+        String side0, side1, side2;
+        boolean checkExistBoolean = true;
+
+        System.out.print("Сколько хотите добавить треугольников: ");
+        String newSizeMassive = IMethods.CheckNumber(scanner.nextLine());
+        newSizeMassiveInt = Integer.parseInt(newSizeMassive);
+
+        RightTriangle[] reservMassive = new RightTriangle[newSizeMassiveInt+rightTriangles.length];
+
+        for (int i = 0; i < reservMassive.length; i++)
+        {
+            reservMassive[i] = new RightTriangle();
+            if(i < rightTriangles.length)
+                reservMassive[i] = rightTriangles[i];
+        }
+
+        do {
+            for (int i = rightTriangles.length; i < reservMassive.length; i++)
+            {
+                double[] reservSides = new double[3];
+
+                System.out.println("\nТреугольник №" + (i + 1));
+                System.out.println("Введите 3 стороны: ");
+                System.out.print(" Сторонa №1: ");
+                side0 = CheckNumber(scanner.nextLine());
+
+                System.out.print("\n Сторонa №2: ");
+                side1 = CheckNumber(scanner.nextLine());
+
+                System.out.print("\n Сторонa №3: ");
+                side2 = CheckNumber(scanner.nextLine());
+
+                reservSides[0] = Integer.parseInt(side0);
+                reservSides[1] = Integer.parseInt(side1);
+                reservSides[2] = Integer.parseInt(side2);
+
+                checkExistBoolean = CheckExist(reservSides);
+                if(!checkExistBoolean)
+                {
+                    System.out.println("\nТакого треугольника не может существовать. Попробуйте еще раз\n");
+                    i--;
+                }
+                else
                 {
                     if ( Math.pow(reservSides[0],2) == (Math.pow(reservSides[1],2)+Math.pow(reservSides[2],2)) ||
-                         Math.pow(reservSides[1],2) == (Math.pow(reservSides[0],2)+Math.pow(reservSides[2],2)) ||
-                         Math.pow(reservSides[2],2) == (Math.pow(reservSides[0],2)+Math.pow(reservSides[1],2)) )
+                            Math.pow(reservSides[1],2) == (Math.pow(reservSides[0],2)+Math.pow(reservSides[2],2)) ||
+                            Math.pow(reservSides[2],2) == (Math.pow(reservSides[0],2)+Math.pow(reservSides[1],2)) )
                     {
-                        reservMassive[i] = new Triangle(reservSides, true);
-                        rightTriangle = true;
+                        reservMassive[i] = new RightTriangle(reservSides);
                     }
-
-
-                    if (!rightTriangle)
+                    else
                     {
                         System.out.println("\nС такими сторонами прям. треугольник не может существовать. Попробуйте еще раз\n");
                         checkExistBoolean = false;
@@ -115,6 +164,18 @@ public interface IMethods
         }while (!checkExistBoolean);
 
         return reservMassive;
+    }
+
+    public static double[] CheckRightTriangle(double[] sides)
+    {
+        if ( Math.pow(sides[0],2) == (Math.pow(sides[1],2)+Math.pow(sides[2],2)) ||
+                Math.pow(sides[1],2) == (Math.pow(sides[0],2)+Math.pow(sides[2],2)) ||
+                Math.pow(sides[2],2) == (Math.pow(sides[0],2)+Math.pow(sides[1],2)) )
+        {
+            return sides;
+        }
+
+        return new double[]{0,0,0};
     }
 
     public static void ShowTriangles(Triangle[] triangle)

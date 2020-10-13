@@ -2,17 +2,15 @@ package com.company;
 
 public class Triangle implements IMethods
 {
-    private double[] sides = new double[3];
-    private double[] angles = new double[3];
-    private double perimeter;
-    private double square;
+    public double[] sides = new double[3];
+    public double[] angles = new double[3];
+    public double perimeter;
+    public double square;
 
-    public Triangle(double[] sides, boolean rightTriangle)
+    public Triangle(double[] sides)
     {
         setSides(sides);
         setAngles();
-        if(rightTriangle)
-            setAngles1();
         setPerimeter();
         setSquare();
     }
@@ -32,14 +30,17 @@ public class Triangle implements IMethods
     }
 
     public void setAngles() {
-        angles[0] = Math.toDegrees( Math.abs( Math.cos(Math.toRadians( (Math.pow(sides[0],2)+Math.pow(sides[2],2)-Math.pow(sides[1],2)) / 2*sides[0]*sides[2]) ) ) );
-        angles[1] = Math.toDegrees( Math.abs( Math.cos(Math.toRadians( (Math.pow(sides[0],2)+Math.pow(sides[1],2)-Math.pow(sides[2],2)) / 2*sides[0]*sides[1]) ) ) );
-        angles[2] = Math.toDegrees( Math.abs( Math.cos(Math.toRadians( (Math.pow(sides[1],2)+Math.pow(sides[2],2)-Math.pow(sides[0],2)) / 2*sides[2]*sides[1]) ) ) );
-    }
-
-    public void setAngles1()
-    {
-        angles[0] = 90;
+        if(sides[0] == 0 || sides[1] == 0 || sides[2] == 0)
+        {
+            angles[0] = 0;
+            angles[1] = 0;
+            angles[2] = 0;
+        }
+        else {
+            angles[0] = Math.toDegrees(Math.abs(Math.cos(Math.toRadians((Math.pow(sides[0], 2) + Math.pow(sides[2], 2) - Math.pow(sides[1], 2)) / 2 * sides[0] * sides[2]))));
+            angles[1] = Math.toDegrees(Math.abs(Math.cos(Math.toRadians((Math.pow(sides[0], 2) + Math.pow(sides[1], 2) - Math.pow(sides[2], 2)) / 2 * sides[0] * sides[1]))));
+            angles[2] = Math.toDegrees(Math.abs(Math.cos(Math.toRadians((Math.pow(sides[1], 2) + Math.pow(sides[2], 2) - Math.pow(sides[0], 2)) / 2 * sides[2] * sides[1]))));
+        }
     }
 
     public double[] getAngles() {
